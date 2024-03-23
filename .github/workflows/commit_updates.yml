@@ -12,11 +12,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Append date to updates
+      - name: Update updates
         run: |
-          echo "Last Updated: $(date +'%B %d, %Y')" >> updates.md
+          current_date=$(date +'%B %d, %Y')
+          commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
+          echo -e "## Chatty-Bot commits\n- Time: $current_date\n- Commit Name: $commit_message\n" >> updates.md
           git add updates.md
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "Update updates.md with current date" || exit 0
+          git commit -m "Update updates.md with Chatty-Bot commit log" || exit 0
           git push

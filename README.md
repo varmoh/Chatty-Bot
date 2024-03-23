@@ -8,5 +8,7 @@ Chatty-Bot
 └── helpers
     └── subfolder
         └── install_modules.js
+README.md
+updates.md
 ```
 
