@@ -1,0 +1,22 @@
+name: Update UPDATES with Current Date
+
+on:
+  push:
+    branches:
+      - main  # Change this to your main branch name if different
+
+jobs:
+  update-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Append date to updates
+        run: |
+          echo "Last Updated: $(date +'%B %d, %Y')" >> updates.md
+          git add updates.md
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Update updates.md with current date" || exit 0
+          git push
