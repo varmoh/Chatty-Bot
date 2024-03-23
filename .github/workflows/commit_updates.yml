@@ -14,10 +14,11 @@ jobs:
 
       - name: Update updates
         run: |
-          current_date=$(TZ="Europe/Berlin" date +'%B %d, %Y')
-          current_time=$(TZ="Europe/Berlin" date +'%H:%M:%S')
+          current_date=$(TZ=Europe/Helsinki date +'%B %d, %Y')
+          current_time=$(TZ=Europe/Helsinki date +'%H:%M:%S')
+          commit_name=$(git log --format='%an' -n 1 $GITHUB_SHA)
           commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
-          echo -e "## Chatty-Bot commits\n- Date: $current_date\n- Time (GMT+2): $current_time\n- Commit Name: $commit_message\n\n$(cat updates.md)" > updates.md
+          echo -e "## Chatty-Bot commits\n- Date: $current_date\n- Time: $current_time GMT+2\n- Commit Name: $commit_message\n- Committed by: $commit_name\n\n$(cat updates.md)" > updates.md
           git add updates.md
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
