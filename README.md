@@ -5,9 +5,13 @@ Project folder structure (updates in progress) -
 
 ```
 Chatty-Bot
+└── .github
+    └── workflows
+        └── commit_updates.yml
+└── Documentations
 └── helpers
     └── subfolder
-        └── install_modules.js
+        └── install_modules.py
 README.md
 updates.md
 ```
