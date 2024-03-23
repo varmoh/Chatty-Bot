@@ -12,6 +12,8 @@ Chatty-Bot
 └── helpers
     └── subfolder
         └── install_modules.py
+        └── check_db.py
+        └── clear_db.py
 README.md
 updates.md
 ```
