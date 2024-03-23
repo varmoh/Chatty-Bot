@@ -10,7 +10,6 @@ Chatty-Bot
         └── commit_updates.yml
 └── Documentations
 └── helpers
-    └── subfolder
         └── install_modules.py
         └── check_db.py
         └── clear_db.py
