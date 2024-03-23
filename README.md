@@ -8,6 +8,13 @@ Chatty-Bot
 └── .github
     └── workflows
         └── commit_updates.yml
+└── Chatty-Bot
+    └── admin.py
+    └── chatbot_endpoint.py
+    └── chatbot.py
+    └── endpoint.py
+    └── README.md
+    └── run.py
 └── Documentations
 └── helpers
         └── install_modules.py

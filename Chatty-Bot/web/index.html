@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatBot Admin Panel</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>ChatBot Admin Panel</h1>
+    <div class="form-group">
+      <label for="trigger">Trigger:</label>
+      <input type="text" id="trigger" placeholder="Enter trigger">
+    </div>
+    <div class="form-group">
+      <label for="response">Response:</label>
+      <input type="text" id="response" placeholder="Enter response">
+    </div>
+    <div class="form-group">
+      <label for="language">Language:</label>
+      <select id="language">
+        <option value="english">English</option>
+        <option value="lithuanian">Lithuanian</option>
+        <option value="estonian">Estonian</option>
+      </select>
+    </div>
+    <button onclick="addTrigger()">Add Trigger</button>
+    <div class="trigger-list">
+      <!-- Triggers will be displayed here -->
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

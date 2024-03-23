@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot</title>
+  <header>Chatbot</header>
+  <style>
+    /* Chatbot styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f7f7f7;
+    }
+
+    header {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 20px;
+    background-color: #2f2f30;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    }
+
+    #language-selection {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    #language-select {
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #007bff;
+      border-radius: 5px;
+      background-color: #f7f7f7;
+      color: #333;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      cursor: pointer;
+    }
+
+    #language-select:focus {
+      outline: none;
+      border-color: #0056b3;
+    }
+
+    #language-select option {
+      padding: 10px;
+      background-color: #f7f7f7;
+      color: #333;
+    }
+
+    #chat-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    #chat-display {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .user-message {
+      background-color: #e5f4fc;
+      align-self: flex-end;
+    }
+
+    .bot-message {
+      background-color: #f0f0f0;
+      align-self: flex-start;
+    }
+
+    #chat-input {
+      display: flex;
+      align-items: center;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
+      font-size: 16px;
+    }
+
+    #send-button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    #send-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div id="language-selection">
+    <label for="language-select">Select Language:</label>
+    <select id="language-select">
+      <option value="english">English</option>
+      <option value="estonian">Estonian</option>
+      <option value="lithuanian">Lithuanian</option>
+    </select>
+  </div>
+
+  <div id="chat-container">
+    <div id="chat-display"></div>
+    <div id="chat-input">
+      <input type="text" id="user-input" placeholder="">
+      <button id="send-button">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const userInputElement = document.getElementById('user-input');
+    const chatDisplay = document.getElementById('chat-display');
+    const sendButton = document.getElementById('send-button');
+    const languageSelect = document.getElementById('language-select');
+
+    function sendMessage() {
+      const userMessage = userInputElement.value.trim();
+      const selectedLanguage = languageSelect.value;
+
+      if (!userMessage) {
+        return;
+      }
+
+      displayMessage(userMessage, 'user');
+      userInputElement.value = '';
+
+      fetch('/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_input: userMessage,
+          language: selectedLanguage,
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        displayMessage(data.response, 'bot');
+        scrollToBottom();
+      })
+      .catch(error => {
+        console.error('Error sending message:', error);
+      });
+    }
+
+    sendButton.addEventListener('click', sendMessage);
+
+    userInputElement.addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    function displayMessage(message, sender) {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('message');
+
+      const messageContent = document.createElement('div');
+      messageContent.textContent = message;
+
+      if (sender === 'user') {
+        messageElement.classList.add('user-message');
+        const senderName = document.createElement('span');
+        senderName.textContent = 'You: ';
+        messageContent.prepend(senderName);
+      } else {
+        messageElement.classList.add('bot-message');
+        const senderName = document.createElement('span');
+        senderName.textContent = 'Chatbot: ';
+        messageContent.prepend(senderName);
+      }
+
+      messageElement.appendChild(messageContent);
+      chatDisplay.appendChild(messageElement);
+    }
+
+    function scrollToBottom() {
+      chatDisplay.scrollTop = chatDisplay.scrollHeight;
+    }
+
+// Automatically scroll to bottom when the page loads
+  window.onload = function() {
+  scrollToBottom(); // Scroll to bottom
+  languageSelect.dispatchEvent(new Event('change')); // Trigger the language change event
+  };
+
+
+    // Change Send button text based on selected language
+    languageSelect.addEventListener('change', function() {
+      const selectedLanguage = languageSelect.value;
+      if (selectedLanguage === 'estonian') {
+        sendButton.textContent = 'Saada';
+        userInputElement.placeholder = 'Sisestage oma sõnum siia...';
+      } else if (selectedLanguage === 'lithuanian') {
+        sendButton.textContent = 'Siųsti';
+        userInputElement.placeholder = 'Įveskite savo žinutę čia...';
+      } else {
+        sendButton.textContent = 'Send';
+        userInputElement.placeholder = 'Type your message here...';
+      }
+    });
+
+  </script>
+</body>
+</html>

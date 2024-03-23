@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  chatbot_script:
+    build: .
+    environment:
+      - RUN_SCRIPT=chatbot.py
+    networks:
+      - chatty
+
+  admin_script:
+    build: .
+    environment:
+      - RUN_SCRIPT=admin.py
+    networks:
+      - chatty
+
+  endpoint:
+    build: .
+    environment:
+      - RUN_SCRIPT=endpoint.py
+    ports:
+      - "5000:5000"
+    networks:
+      - chatty
+
+  chatbot_endpoint:
+    build: .
+    environment:
+      - RUN_SCRIPT=chatbot_endpoint.py
+    ports:
+      - "5001:5001"
+    networks:
+      - chatty
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - chatty
+
+networks:
+  chatty:
+
+volumes:
+  mongodb-data:
+    driver: local
