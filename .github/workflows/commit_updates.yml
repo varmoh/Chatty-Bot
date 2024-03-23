@@ -17,7 +17,7 @@ jobs:
           current_date=$(date +'%B %d, %Y')
           current_time=$(date +'%H:%M:%S')
           commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
-          echo -e "## Chatty-Bot commits\n- Date: $current_date\n- Time: $current_time\n- Commit Name: $commit_message\n\n$(cat updates.md)" > updates.md
+          echo -e "## Chatty-Bot commits\n- Date: $current_date\n- Time: $current_time\n- Commit Name: $commit_message\n\n## Past Updates\n$(cat updates.md | sed '1,/# Chatty-Bot commits/d')" > updates.md
           git add updates.md
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
